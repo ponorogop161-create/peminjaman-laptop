@@ -1,0 +1,2633 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SIPINTAR — Sistem Peminjaman Laptop Sekolah</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<!-- Lucide Icons for modern UI -->
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+:root{
+  --navy:#0f1d36;
+  --navy2:#1b2d4f;
+  --navy3:#2b4370;
+
+  --cream:#f8f6f0;
+  --white:#ffffff;
+  --border:#e2dcd0;
+  --border2:#c6bfae;
+
+  --orange:#c25e29;
+  --orange2:#9c481c;
+
+  --green:#2e6f40;
+  --green-bg:#e4f1e8;
+
+  --red:#b92f2f;
+  --red-bg:#fde8e8;
+
+  --yellow:#a67c1e;
+  --yellow-bg:#fef3db;
+
+  --blue:#2b5e9e;
+  --blue-bg:#e5effc;
+
+  --text:#1f1c16;
+  --muted:#696255;
+
+  --shadow:0 10px 30px -5px rgba(29,42,68,0.06), 0 4px 6px -2px rgba(29,42,68,0.03);
+  --radius:10px;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,body{
+  margin:0;
+  padding:0;
+}
+
+body{
+  background:var(--cream);
+  color:var(--text);
+  font-family:'Inter',sans-serif;
+  font-size:14px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+button,
+input,
+select,
+textarea{
+  font-family:inherit;
+}
+
+h1,h2,h3{
+  font-family:'Source Serif 4',serif;
+}
+
+.kode{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  background:#f0ece1;
+  padding:2px 6px;
+  border-radius:4px;
+}
+
+/* ================= APP ================= */
+
+#app{
+  min-height:100vh;
+}
+
+/* ================= LOGIN ================= */
+
+.login-page{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:
+    radial-gradient(circle at 15% 15%,rgba(43,94,158,.15),transparent 40%),
+    radial-gradient(circle at 85% 85%,rgba(194,94,41,.15),transparent 40%),
+    var(--cream);
+}
+
+.login-container{
+  width:100%;
+  max-width:980px;
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  background:white;
+  border:1px solid var(--border);
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 25px 65px rgba(15,29,54,.15);
+}
+
+.login-info{
+  background:var(--navy);
+  color:white;
+  padding:50px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  position:relative;
+}
+
+.login-logo{
+  width:60px;
+  height:60px;
+  background:var(--orange);
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'Source Serif 4',serif;
+  font-size:28px;
+  font-weight:700;
+  margin-bottom:22px;
+  box-shadow:0 8px 20px rgba(194,94,41,.35);
+}
+
+.login-info h1{
+  margin:0 0 10px;
+  font-size:36px;
+  letter-spacing:-0.5px;
+}
+
+.login-info p{
+  color:#cbd5e8;
+  max-width:420px;
+  font-size:13.5px;
+  line-height:1.7;
+}
+
+
+.login-feature{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  color:#e2e8f0;
+  font-size:13px;
+}
+
+.login-feature span{
+  width:26px;
+  height:26px;
+  border-radius:8px;
+  background:rgba(255,255,255,.08);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--orange);
+  font-weight:bold;
+}
+
+.login-form{
+  padding:45px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.login-form h2{
+  margin:0 0 4px;
+  color:var(--navy);
+  font-size:24px;
+}
+
+.login-sub{
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:24px;
+}
+
+.role-tabs{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-bottom:22px;
+}
+
+.role-tab{
+  border:1px solid var(--border);
+  background:var(--cream);
+  padding:10px 8px;
+  border-radius:8px;
+  color:var(--muted);
+  cursor:pointer;
+  font-size:12px;
+  font-weight:600;
+  text-align:center;
+  transition:all .18s;
+}
+
+.role-tab:hover{
+  border-color:var(--navy3);
+  color:var(--navy);
+}
+
+.role-tab.active{
+  background:var(--navy);
+  color:white;
+  border-color:var(--navy);
+  box-shadow:0 4px 12px rgba(15,29,54,.2);
+}
+
+.demo-box{
+  margin-top:20px;
+  padding:14px;
+  background:#f3efe5;
+  border:1px solid var(--border);
+  border-radius:8px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.7;
+}
+
+/* ================= FORM ================= */
+
+.form-row{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  margin-bottom:14px;
+}
+
+.form-row label{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:600;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  border:1px solid var(--border2);
+  border-radius:8px;
+  padding:10px 12px;
+  background:white;
+  color:var(--text);
+  font-size:13px;
+  transition:all .15s;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  outline:none;
+  border-color:var(--navy);
+  box-shadow:0 0 0 3px rgba(43,94,158,.14);
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0 16px;
+}
+
+/* ================= BUTTON ================= */
+
+.btn{
+  border:1px solid var(--border2);
+  background:white;
+  color:var(--navy);
+  padding:8px 14px;
+  border-radius:8px;
+  font-size:12.5px;
+  font-weight:600;
+  cursor:pointer;
+  transition:all .15s;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  justify-content:center;
+}
+
+.btn:hover{
+  border-color:var(--navy);
+  transform:translateY(-1px);
+  background:#fdfcf9;
+}
+
+.btn-primary{
+  background:var(--orange);
+  color:white;
+  border-color:var(--orange);
+}
+
+.btn-primary:hover{
+  background:var(--orange2);
+  border-color:var(--orange2);
+}
+
+.btn-danger{
+  color:var(--red);
+  background:var(--red-bg);
+  border-color:transparent;
+}
+
+.btn-danger:hover{
+  background:#f8d1d1;
+}
+
+.btn-success{
+  color:var(--green);
+  background:var(--green-bg);
+  border-color:transparent;
+}
+
+.btn-success:hover{
+  background:#d0e6d6;
+}
+
+.btn-sm{
+  padding:6px 10px;
+  font-size:11.5px;
+}
+
+/* ================= LAYOUT ================= */
+
+.app-layout{
+  min-height:100vh;
+  display:flex;
+}
+
+.sidebar{
+  width:255px;
+  flex-shrink:0;
+  background:var(--navy);
+  color:white;
+  display:flex;
+  flex-direction:column;
+  position:sticky;
+  top:0;
+  height:100vh;
+  border-right:1px solid rgba(255,255,255,.05);
+}
+
+.brand{
+  padding:24px 22px 18px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.brand-title{
+  font-family:'Source Serif 4',serif;
+  font-size:22px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.brand-sub{
+  color:#94a3b8;
+  font-size:11px;
+  margin-top:3px;
+}
+
+.sidebar nav{
+  padding:15px 12px;
+  flex:1;
+  overflow-y:auto;
+}
+
+.nav-section{
+  color:#64748b;
+  font-size:10.5px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  padding:12px 10px 6px;
+  font-weight:600;
+}
+
+.navlink{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  margin:4px 0;
+  border-radius:8px;
+  color:#cbd5e1;
+  text-decoration:none;
+  cursor:pointer;
+  font-size:12.5px;
+  font-weight:500;
+  transition:all .15s;
+}
+
+.navlink:hover{
+  background:rgba(255,255,255,.07);
+  color:white;
+}
+
+.navlink.active{
+  background:var(--orange);
+  color:white;
+  box-shadow:0 4px 12px rgba(194,94,41,.3);
+}
+
+.nav-icon{
+  width:20px;
+  height:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.sidebar-footer{
+  padding:16px;
+  border-top:1px solid rgba(255,255,255,.08);
+  background:rgba(0,0,0,.15);
+}
+
+.user-box{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.avatar{
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  background:var(--orange);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  font-size:13px;
+  color:white;
+  box-shadow:0 4px 10px rgba(194,94,41,.3);
+}
+
+.user-name{
+  font-size:12.5px;
+  font-weight:600;
+}
+
+.user-role{
+  color:#94a3b8;
+  font-size:11px;
+  text-transform:capitalize;
+}
+
+.logout{
+  margin-top:10px;
+  width:100%;
+  border:0;
+  background:rgba(239,68,68,.12);
+  color:#f87171;
+  cursor:pointer;
+  font-size:12px;
+  padding:7px;
+  border-radius:6px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  font-weight:500;
+  transition:all .15s;
+}
+
+.logout:hover{
+  background:rgba(239,68,68,.22);
+}
+
+/* ================= MAIN ================= */
+
+.main{
+  flex:1;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+}
+
+.topbar{
+  background:white;
+  border-bottom:1px solid var(--border);
+  padding:18px 32px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+
+.topbar h1{
+  margin:0;
+  font-size:22px;
+  color:var(--navy);
+}
+
+.topbar-right{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.reset-data-btn{
+  font-size:11.5px;
+  background:#fef2f2;
+  color:#dc2626;
+  border:1px solid #fecaca;
+  padding:6px 10px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.reset-data-btn:hover{
+  background:#fee2e2;
+}
+
+.content{
+  padding:28px 32px 64px;
+  max-width:1500px;
+  width:100%;
+}
+
+/* ================= STATS ================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  margin-bottom:24px;
+}
+
+.stat-card{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:20px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+}
+
+.stat-card:before{
+  content:"";
+  position:absolute;
+  width:4px;
+  height:70%;
+  left:0;
+  top:15%;
+  border-radius:0 4px 4px 0;
+  background:var(--orange);
+}
+
+.stat-title{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:600;
+}
+
+.stat-number{
+  font-family:'Source Serif 4',serif;
+  color:var(--navy);
+  font-size:32px;
+  margin-top:4px;
+  line-height:1.1;
+}
+
+.stat-info{
+  color:var(--muted);
+  font-size:11px;
+  margin-top:4px;
+}
+
+.stat-icon-wrap{
+  width:42px;
+  height:42px;
+  border-radius:10px;
+  background:#f3efe5;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--navy);
+}
+
+/* ================= PANEL ================= */
+
+.panel{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  margin-bottom:22px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+
+.panel-head{
+  padding:16px 22px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  background:#fcfbf8;
+}
+
+.panel-title{
+  margin:0;
+  color:var(--navy);
+  font-family:'Source Serif 4',serif;
+  font-size:18px;
+}
+
+.panel-sub{
+  color:var(--muted);
+  font-size:11.5px;
+  margin-top:2px;
+}
+
+.panel-body{
+  padding:20px 22px;
+}
+
+/* ================= TOOLBAR ================= */
+
+.toolbar{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  margin-bottom:16px;
+  flex-wrap:wrap;
+}
+
+.search-wrap{
+  flex:1;
+  min-width:220px;
+  position:relative;
+}
+
+.search-wrap input{
+  padding-left:36px;
+}
+
+.search-icon{
+  position:absolute;
+  left:11px;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--muted);
+  pointer-events:none;
+}
+
+/* ================= TABLE ================= */
+
+.table-wrap{
+  width:100%;
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+  min-width:680px;
+}
+
+th{
+  text-align:left;
+  color:var(--muted);
+  font-size:11.5px;
+  font-weight:600;
+  border-bottom:1px solid var(--border2);
+  padding:11px 12px;
+  background:#f8f6f0;
+  white-space:nowrap;
+}
+
+td{
+  padding:11px 12px;
+  border-bottom:1px solid var(--border);
+  vertical-align:middle;
+}
+
+tr:last-child td{
+  border-bottom:none;
+}
+
+tbody tr:hover{
+  background:#f9f7f2;
+}
+
+/* ================= BADGE ================= */
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:4px 10px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:600;
+  white-space:nowrap;
+}
+
+.badge-ok{
+  background:var(--green-bg);
+  color:var(--green);
+}
+
+.badge-wait{
+  background:var(--yellow-bg);
+  color:var(--yellow);
+}
+
+.badge-danger{
+  background:var(--red-bg);
+  color:var(--red);
+}
+
+.badge-blue{
+  background:var(--blue-bg);
+  color:var(--blue);
+}
+
+.badge-neutral{
+  background:#ece9e0;
+  color:var(--muted);
+}
+
+/* ================= EMPTY ================= */
+
+.empty{
+  padding:42px 20px;
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.empty-icon{
+  font-size:32px;
+  opacity:.5;
+  margin-bottom:8px;
+}
+
+/* ================= FLASH ================= */
+
+.flash{
+  position:fixed;
+  right:25px;
+  top:25px;
+  z-index:1000;
+  background:var(--navy);
+  color:white;
+  padding:12px 18px;
+  border-radius:10px;
+  box-shadow:0 12px 35px rgba(15,29,54,.25);
+  font-size:12.5px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  animation:slideIn .22s cubic-bezier(0.16,1,0.3,1);
+}
+
+@keyframes slideIn{
+  from{
+    opacity:0;
+    transform:translateY(-12px) scale(0.96);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+
+/* ================= WELCOME ================= */
+
+.welcome{
+  background:linear-gradient(135deg,var(--navy),var(--navy2));
+  color:white;
+  border-radius:12px;
+  padding:24px 28px;
+  margin-bottom:22px;
+  box-shadow:var(--shadow);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.welcome h2{
+  margin:0 0 4px;
+  font-size:24px;
+}
+
+.welcome p{
+  margin:0;
+  color:#cbd5e1;
+  font-size:13px;
+}
+
+/* ================= QUICK ACTION ================= */
+
+.quick-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+
+.quick-card{
+  padding:16px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  cursor:pointer;
+  transition:.18s;
+  background:white;
+}
+
+.quick-card:hover{
+  border-color:var(--orange);
+  transform:translateY(-2px);
+  box-shadow:var(--shadow);
+}
+
+.quick-icon{
+  width:40px;
+  height:40px;
+  border-radius:10px;
+  background:var(--blue-bg);
+  color:var(--blue);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:10px;
+}
+
+.quick-title{
+  color:var(--navy);
+  font-weight:700;
+  font-size:13px;
+}
+
+.quick-desc{
+  color:var(--muted);
+  font-size:11.5px;
+  margin-top:4px;
+}
+
+/* ================= NOTE ================= */
+
+.note{
+  color:var(--muted);
+  font-size:11.5px;
+  margin-top:8px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:1050px){
+  .sidebar{
+    width:210px;
+  }
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:760px){
+  .login-container{
+    grid-template-columns:1fr;
+    max-width:520px;
+  }
+  .login-info{
+    display:none;
+  }
+  .login-form{
+    padding:32px;
+  }
+  .sidebar{
+    width:70px;
+  }
+  .brand-title span{
+    display:none;
+  }
+  .brand-sub,
+  .navlink span,
+  .nav-section,
+  .user-name,
+  .user-role,
+  .logout span{
+    display:none;
+  }
+  .brand{
+    text-align:center;
+    padding:20px 8px;
+  }
+  .navlink{
+    justify-content:center;
+    padding:12px;
+  }
+  .topbar{
+    padding:15px 18px;
+  }
+  .topbar h1{
+    font-size:18px;
+  }
+  .content{
+    padding:18px 15px 45px;
+  }
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+  .quick-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:500px){
+  .stats{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="app"></div>
+
+<script>
+/* =========================================================
+   DATABASE SEED & LOCALSTORAGE MANAGER
+========================================================= */
+
+const STORAGE_KEY = 'sipintar_db_v2';
+const SEQ_KEY = 'sipintar_seq_v2';
+
+const defaultDb = {
+  admin:[
+    {
+      id_admin:'A01',
+      nama_admin:'Siti Rahma',
+      username:'admin1',
+      password:'admin123'
+    }
+  ],
+  petugas:[
+    {
+      id_petugas:'P01',
+      nama_petugas:'Budi Santoso',
+      username:'petugas1',
+      password:'petugas123',
+      no_hp:'081234500011'
+    },
+    {
+      id_petugas:'P02',
+      nama_petugas:'Dewi Anjani',
+      username:'petugas2',
+      password:'petugas123',
+      no_hp:'081234500022'
+    }
+  ],
+  siswa:[
+    {
+      id_siswa:'S01',
+      nis:'2024001',
+      nama_siswa:'Ahmad Fajar',
+      username:'ahmad',
+      password:'siswa123',
+      kelas:'XI',
+      jurusan:'RPL',
+      no_hp:'081211110001'
+    },
+    {
+      id_siswa:'S02',
+      nis:'2024002',
+      nama_siswa:'Nadia Putri',
+      username:'nadia',
+      password:'siswa123',
+      kelas:'XI',
+      jurusan:'RPL',
+      no_hp:'081211110002'
+    },
+    {
+      id_siswa:'S03',
+      nis:'2024003',
+      nama_siswa:'Rizky Ramadhan',
+      username:'rizky',
+      password:'siswa123',
+      kelas:'X',
+      jurusan:'TKJ',
+      no_hp:'081211110003'
+    }
+  ],
+  laptop:[
+    {
+      id_laptop:'L01',
+      kode_laptop:'LT-001',
+      merk:'Lenovo',
+      tipe:'ThinkPad E14',
+      kondisi:'Baik',
+      status:'Tersedia'
+    },
+    {
+      id_laptop:'L02',
+      kode_laptop:'LT-002',
+      merk:'Lenovo',
+      tipe:'ThinkPad E14',
+      kondisi:'Baik',
+      status:'Tersedia'
+    },
+    {
+      id_laptop:'L03',
+      kode_laptop:'LT-003',
+      merk:'Asus',
+      tipe:'Vivobook 14',
+      kondisi:'Baik',
+      status:'Tersedia'
+    },
+    {
+      id_laptop:'L04',
+      kode_laptop:'LT-004',
+      merk:'Asus',
+      tipe:'Vivobook 14',
+      kondisi:'Rusak Ringan',
+      status:'Perbaikan'
+    },
+    {
+      id_laptop:'L05',
+      kode_laptop:'LT-005',
+      merk:'HP',
+      tipe:'ProBook 440',
+      kondisi:'Baik',
+      status:'Tersedia'
+    }
+  ],
+  peminjaman:[
+    {
+      id_peminjaman:'PJ01',
+      id_siswa:'S02',
+      id_admin:'A01',
+      tanggal_pinjam:'2026-09-10',
+      tanggal_kembali_rencana:'2026-09-12',
+      status:'Selesai'
+    }
+  ],
+  detail_peminjaman:[
+    {
+      id_detail:'D01',
+      id_peminjaman:'PJ01',
+      id_laptop:'L02',
+      kondisi_pinjam:'Baik'
+    }
+  ],
+  pengembalian:[
+    {
+      id_pengembalian:'R01',
+      id_peminjaman:'PJ01',
+      id_petugas:'P01',
+      tanggal_pengembalian:'2026-09-12',
+      kondisi_kembali:'Baik',
+      keterangan:'Tidak ada kerusakan'
+    }
+  ]
+};
+
+const defaultSeq = {
+  pj: 2,
+  d: 2,
+  r: 2,
+  laptop: 6,
+  siswa: 4,
+  petugas: 3
+};
+
+function loadStorage(){
+  const savedDb = localStorage.getItem(STORAGE_KEY);
+  const savedSeq = localStorage.getItem(SEQ_KEY);
+  if(savedDb){
+    try{ db = JSON.parse(savedDb); }catch(e){ db = JSON.parse(JSON.stringify(defaultDb)); }
+  } else {
+    db = JSON.parse(JSON.stringify(defaultDb));
+  }
+  if(savedSeq){
+    try{ seq = JSON.parse(savedSeq); }catch(e){ seq = JSON.parse(JSON.stringify(defaultSeq)); }
+  } else {
+    seq = JSON.parse(JSON.stringify(defaultSeq));
+  }
+}
+
+function saveStorage(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+  localStorage.setItem(SEQ_KEY, JSON.stringify(seq));
+}
+
+function resetAllData(){
+  if(confirm('Apakah Anda yakin ingin mereset seluruh data SIPINTAR ke pengaturan awal?')){
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(SEQ_KEY);
+    loadStorage();
+    showFlash('Data berhasil di-reset ke pengaturan awal.');
+    render();
+  }
+}
+
+let db = {};
+let seq = {};
+loadStorage();
+
+/* =========================================================
+   STATE & HELPERS
+========================================================= */
+
+let session = null;
+let currentPage = 'dashboard';
+let flashTimer = null;
+
+const $ = selector => document.querySelector(selector);
+const todayStr = () => new Date().toISOString().slice(0,10);
+
+const findLaptop = id => db.laptop.find(x => x.id_laptop === id);
+const findSiswa = id => db.siswa.find(x => x.id_siswa === id);
+const findPetugas = id => db.petugas.find(x => x.id_petugas === id);
+const findPeminjaman = id => db.peminjaman.find(x => x.id_peminjaman === id);
+
+const escapeHtml = text =>
+  String(text ?? '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
+
+function showFlash(message, type='navy'){
+  clearTimeout(flashTimer);
+  const old = document.querySelector('.flash');
+  if(old) old.remove();
+
+  const div = document.createElement('div');
+  div.className = 'flash';
+  div.innerHTML = `<i data-lucide="check-circle-2" style="width:18px;height:18px;"></i> <span>${escapeHtml(message)}</span>`;
+  document.body.appendChild(div);
+  if(window.lucide) lucide.createIcons();
+
+  flashTimer = setTimeout(()=>{
+    div.remove();
+  },2800);
+}
+
+function statusBadge(status){
+  const map = {
+    'Tersedia':'badge-ok',
+    'Dipinjam':'badge-wait',
+    'Menunggu':'badge-wait',
+    'Menunggu Konfirmasi':'badge-wait',
+    'Perbaikan':'badge-danger',
+    'Hilang':'badge-danger',
+    'Selesai':'badge-ok',
+    'Ditolak':'badge-danger'
+  };
+  return `
+    <span class="badge ${map[status] || 'badge-neutral'}">
+      ${escapeHtml(status)}
+    </span>
+  `;
+}
+
+/* =========================================================
+   LOGIN SCREEN
+========================================================= */
+
+function renderLogin(){
+  const app = $('#app');
+  app.innerHTML = `
+    <div class="login-page">
+      <div class="login-container">
+        <div class="login-info">
+          <div class="login-logo">S</div>
+          <h1>SIPINTAR</h1>
+          <p>
+            Sistem Informasi Peminjaman Laptop Sekolah yang cerdas, 
+            rapi, dan efisien untuk pengelolaan aset inventaris serta 
+            sirkulasi peminjaman siswa.
+          </p>
+
+          <div class="login-features">
+
+            <div class="login-feature">
+              <span>✓</span>
+              Manajemen data laptop
+            </div>
+
+            <div class="login-feature">
+              <span>✓</span>
+              Pengajuan peminjaman siswa
+            </div>
+
+            <div class="login-feature">
+              <span>✓</span>
+              Persetujuan petugas
+            </div>
+
+            <div class="login-feature">
+              <span>✓</span>
+              Pencatatan pengembalian
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="login-form">
+          <h2>Masuk Akun</h2>
+          <div class="login-sub">
+            Silakan masukkan username dan password Anda.
+          </div>
+
+          <div class="form-row">
+            <label>Username</label>
+            <input id="loginUser" placeholder="Masukkan username">
+          </div>
+
+          <div class="form-row">
+            <label>Password</label>
+            <input id="loginPass" type="password" placeholder="Masukkan password">
+          </div>
+
+          <button class="btn btn-primary" id="loginBtn" style="width:100%;padding:11px;margin-top:4px;">
+            Masuk ke Sistem
+          </button>
+
+          <div class="demo-box">
+            <b>Akun Demo Tersedia:</b><br>
+            • Admin: <span class="kode">admin1 / admin123</span><br>
+            • Petugas: <span class="kode">petugas1 / petugas123</span><br>
+            • Siswa: <span class="kode">ahmad / siswa123</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  $('#loginBtn').onclick = ()=>{
+    const username = $('#loginUser').value.trim();
+    const password = $('#loginPass').value;
+
+    // Cari otomatis di tabel admin, petugas, atau siswa
+    let found = null;
+    let activeRole = '';
+
+    const foundAdmin = db.admin.find(x => x.username === username && x.password === password);
+    if(foundAdmin){
+      found = foundAdmin;
+      activeRole = 'admin';
+    } else {
+      const foundPetugas = db.petugas.find(x => x.username === username && x.password === password);
+      if(foundPetugas){
+        found = foundPetugas;
+        activeRole = 'petugas';
+      } else {
+        const foundSiswa = db.siswa.find(x => x.username === username && x.password === password);
+        if(foundSiswa){
+          found = foundSiswa;
+          activeRole = 'siswa';
+        }
+      }
+    }
+
+    if(!found){
+      showFlash('Username atau password salah.');
+      return;
+    }
+
+    session = {
+      role: activeRole,
+      id: found.id_admin || found.id_petugas || found.id_siswa,
+      nama: found.nama_admin || found.nama_petugas || found.nama_siswa
+    };
+
+    currentPage = 'dashboard';
+    render();
+  };
+}
+
+/* =========================================================
+   NAVIGATION ITEMS
+========================================================= */
+
+function navItemsFor(role){
+  if(role === 'admin'){
+    return [
+      ['dashboard','layout-dashboard','Dashboard'],
+      ['laptop','laptop','Data Laptop'],
+      ['siswa','users','Data Siswa'],
+      ['petugas','user-check','Data Petugas'],
+      ['peminjaman','arrow-up-right','Peminjaman'],
+      ['pengembalian','arrow-down-left','Pengembalian']
+    ];
+  }
+  if(role === 'petugas'){
+    return [
+      ['dashboard','layout-dashboard','Dashboard'],
+      ['laptop','laptop','Data Laptop'],
+      ['peminjaman','arrow-up-right','Peminjaman'],
+      ['pengembalian','arrow-down-left','Pengembalian']
+    ];
+  }
+  return [
+    ['dashboard','layout-dashboard','Dashboard'],
+    ['ajukan','plus-circle','Ajukan Peminjaman'],
+    ['riwayat','history','Riwayat Saya']
+  ];
+}
+
+/* =========================================================
+   SHELL (LAYOUT UTAMA)
+========================================================= */
+
+function renderShell(content, title, subtitle){
+  const app = $('#app');
+  const items = navItemsFor(session.role);
+
+  app.innerHTML = `
+    <div class="app-layout">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-title">
+            <i data-lucide="cpu" style="color:var(--orange);"></i>
+            <span>SIPINTAR</span>
+          </div>
+          <div class="brand-sub">Sistem Peminjaman Laptop</div>
+        </div>
+
+        <nav>
+          <div class="nav-section">Menu Utama</div>
+          ${items.map(item=>`
+            <div class="navlink ${currentPage===item[0]?'active':''}" data-page="${item[0]}">
+              <div class="nav-icon">
+                <i data-lucide="${item[1]}" style="width:18px;height:18px;"></i>
+              </div>
+              <span>${item[2]}</span>
+            </div>
+          `).join('')}
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="user-box">
+            <div class="avatar">
+              ${escapeHtml(session.nama.charAt(0).toUpperCase())}
+            </div>
+            <div>
+              <div class="user-name">${escapeHtml(session.nama)}</div>
+              <div class="user-role">${escapeHtml(session.role)}</div>
+            </div>
+          </div>
+          <button class="logout" id="logoutBtn">
+            <i data-lucide="log-out" style="width:14px;height:14px;"></i>
+            <span>Keluar</span>
+          </button>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <h1>${escapeHtml(title)}</h1>
+          </div>
+          <div class="topbar-right">
+            ${session.role === 'admin' ? `
+              <button class="reset-data-btn" id="resetDataBtn">
+                Reset Data Demo
+              </button>
+            ` : ''}
+            <div class="topbar-sub">${escapeHtml(subtitle || '')}</div>
+          </div>
+        </header>
+
+        <section class="content">
+          ${content}
+        </section>
+      </main>
+    </div>
+  `;
+
+  if(window.lucide) lucide.createIcons();
+
+  document.querySelectorAll('.navlink').forEach(el=>{
+    el.onclick = ()=>{
+      currentPage = el.dataset.page;
+      render();
+    };
+  });
+
+  const logoutBtn = $('#logoutBtn');
+  if(logoutBtn){
+    logoutBtn.onclick = ()=>{
+      if(confirm('Yakin ingin keluar dari sistem?')){
+        session = null;
+        render();
+      }
+    };
+  }
+
+  const resetBtn = $('#resetDataBtn');
+  if(resetBtn){
+    resetBtn.onclick = resetAllData;
+  }
+}
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+function renderDashboard(){
+  const totalLaptop = db.laptop.length;
+  const tersedia = db.laptop.filter(x=>x.status==='Tersedia').length;
+  const dipinjam = db.laptop.filter(x=>x.status==='Dipinjam').length;
+  const perbaikan = db.laptop.filter(x=>x.status==='Perbaikan').length;
+
+  let scope = '';
+
+  if(session.role === 'siswa'){
+    const my = db.peminjaman
+      .filter(x=>x.id_siswa===session.id)
+      .slice()
+      .reverse()
+      .slice(0,5);
+
+    scope = `
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <h2 class="panel-title">Peminjaman Terbaru Saya</h2>
+            <div class="panel-sub">5 riwayat pengajuan peminjaman terakhir</div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          ${renderPeminjamanTable(my, {siswaCol:false})}
+        </div>
+      </div>
+    `;
+  } else {
+    const antre = db.peminjaman
+      .filter(x=>x.status==='Menunggu')
+      .slice()
+      .reverse();
+
+    scope = `
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <h2 class="panel-title">Pengajuan Menunggu Konfirmasi</h2>
+            <div class="panel-sub">Daftar peminjaman dari siswa yang memerlukan tindakan petugas</div>
+          </div>
+          ${
+            antre.length
+              ? `<button class="btn btn-primary btn-sm" onclick="currentPage='peminjaman';render()">Lihat Semua</button>`
+              : ''
+          }
+        </div>
+        <div class="table-wrap">
+          ${
+            antre.length
+              ? renderPeminjamanTable(antre)
+              : `
+                <div class="empty">
+                  <div class="empty-icon">✓</div>
+                  Tidak ada pengajuan yang menunggu saat ini.
+                </div>
+              `
+          }
+        </div>
+      </div>
+    `;
+  }
+
+  let quick = '';
+  if(session.role === 'siswa'){
+    quick = `
+      <div class="panel">
+        <div class="panel-head">
+          <h2 class="panel-title">Akses Cepat</h2>
+        </div>
+        <div class="panel-body">
+          <div class="quick-grid">
+            <div class="quick-card" onclick="currentPage='ajukan';render()">
+              <div class="quick-icon"><i data-lucide="plus-circle"></i></div>
+              <div class="quick-title">Ajukan Peminjaman</div>
+              <div class="quick-desc">Pilih laptop sekolah yang tersedia.</div>
+            </div>
+            <div class="quick-card" onclick="currentPage='riwayat';render()">
+              <div class="quick-icon"><i data-lucide="history"></i></div>
+              <div class="quick-title">Riwayat Saya</div>
+              <div class="quick-desc">Periksa status seluruh laptop yang dipinjam.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  renderShell(`
+    <div class="welcome">
+      <div>
+        <h2>Selamat datang kembali, ${escapeHtml(session.nama)}!</h2>
+        <p>Sistem Informasi Peminjaman Laptop Sekolah SIPINTAR siap digunakan.</p>
+      </div>
+      <div style="font-size:32px;opacity:0.25;">
+        <i data-lucide="laptop" style="width:48px;height:48px;"></i>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card">
+        <div>
+          <div class="stat-title">Total Laptop</div>
+          <div class="stat-number">${totalLaptop}</div>
+          <div class="stat-info">Seluruh unit inventaris</div>
+        </div>
+        <div class="stat-icon-wrap"><i data-lucide="laptop"></i></div>
+      </div>
+
+      <div class="stat-card">
+        <div>
+          <div class="stat-title">Tersedia</div>
+          <div class="stat-number">${tersedia}</div>
+          <div class="stat-info">Siap dipinjam siswa</div>
+        </div>
+        <div class="stat-icon-wrap"><i data-lucide="check-circle"></i></div>
+      </div>
+
+      <div class="stat-card">
+        <div>
+          <div class="stat-title">Dipinjam</div>
+          <div class="stat-number">${dipinjam}</div>
+          <div class="stat-info">Sedang digunakan</div>
+        </div>
+        <div class="stat-icon-wrap"><i data-lucide="clock"></i></div>
+      </div>
+
+      <div class="stat-card">
+        <div>
+          <div class="stat-title">Perbaikan</div>
+          <div class="stat-number">${perbaikan}</div>
+          <div class="stat-info">Dalam perawatan</div>
+        </div>
+        <div class="stat-icon-wrap"><i data-lucide="wrench"></i></div>
+      </div>
+    </div>
+
+    ${scope}
+    ${quick}
+  `, 'Dashboard', `SIPINTAR • ${session.role.toUpperCase()}`);
+}
+
+/* =========================================================
+   LAPTOP PAGE
+========================================================= */
+
+function renderLaptopPage(){
+  let search = '';
+  let filter = 'Semua';
+
+  function renderTable(){
+    const filtered = db.laptop.filter(l=>{
+      const text = (l.kode_laptop + ' ' + l.merk + ' ' + l.tipe + ' ' + l.kondisi).toLowerCase();
+      const cocokSearch = text.includes(search.toLowerCase());
+      const cocokFilter = filter === 'Semua' || l.status === filter;
+      return cocokSearch && cocokFilter;
+    });
+
+    const rows = filtered.map(l=>`
+      <tr>
+        <td class="kode">${escapeHtml(l.kode_laptop)}</td>
+        <td>${escapeHtml(l.merk)}</td>
+        <td>${escapeHtml(l.tipe)}</td>
+        <td>${escapeHtml(l.kondisi)}</td>
+        <td>${statusBadge(l.status)}</td>
+        <td>
+          ${
+            session.role === 'admin'
+            ? `
+              <button class="btn btn-sm" data-edit="${l.id_laptop}">
+                <i data-lucide="edit-3" style="width:14px;height:14px;"></i> Ubah
+              </button>
+              <button class="btn btn-sm btn-danger" data-del="${l.id_laptop}">
+                <i data-lucide="trash-2" style="width:14px;height:14px;"></i> Hapus
+              </button>
+            `
+            : `<span style="color:#999">—</span>`
+          }
+        </td>
+      </tr>
+    `).join('');
+
+    return filtered.length ? `
+      <table>
+        <thead>
+          <tr>
+            <th>Kode</th>
+            <th>Merk</th>
+            <th>Tipe</th>
+            <th>Kondisi</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    ` : `
+      <div class="empty">
+        <div class="empty-icon">⌕</div>
+        Data laptop tidak ditemukan.
+      </div>
+    `;
+  }
+
+  renderShell(`
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">Inventaris Laptop</h2>
+          <div class="panel-sub">Daftar seluruh unit laptop sekolah</div>
+        </div>
+        ${
+          session.role === 'admin'
+          ? `<button class="btn btn-primary" id="addLaptopBtn">+ Tambah Laptop</button>`
+          : ''
+        }
+      </div>
+
+      <div class="panel-body">
+        <div class="toolbar">
+          <div class="search-wrap">
+            <i data-lucide="search" class="search-icon" style="width:16px;height:16px;"></i>
+            <input class="search" id="searchLaptop" placeholder="Cari kode, merk, tipe, atau kondisi...">
+          </div>
+          <select id="filterLaptop" style="width:200px">
+            <option>Semua</option>
+            <option>Tersedia</option>
+            <option>Dipinjam</option>
+            <option>Menunggu Konfirmasi</option>
+            <option>Perbaikan</option>
+            <option>Hilang</option>
+          </select>
+        </div>
+        <div class="table-wrap" id="laptopTable">${renderTable()}</div>
+      </div>
+    </div>
+    <div id="laptopFormWrap"></div>
+  `, 'Data Laptop', 'Manajemen Perangkat Sekolah');
+
+  if(window.lucide) lucide.createIcons();
+
+  $('#searchLaptop').oninput = e => {
+    search = e.target.value;
+    $('#laptopTable').innerHTML = renderTable();
+    if(window.lucide) lucide.createIcons();
+    bindLaptopActions();
+  };
+
+  $('#filterLaptop').onchange = e => {
+    filter = e.target.value;
+    $('#laptopTable').innerHTML = renderTable();
+    if(window.lucide) lucide.createIcons();
+    bindLaptopActions();
+  };
+
+  function bindLaptopActions(){
+    document.querySelectorAll('[data-edit]').forEach(btn=>{
+      btn.onclick = ()=> showLaptopForm(findLaptop(btn.dataset.edit));
+    });
+    document.querySelectorAll('[data-del]').forEach(btn=>{
+      btn.onclick = ()=>{
+        const id = btn.dataset.del;
+        if(db.detail_peminjaman.some(x=>x.id_laptop===id)){
+          showFlash('Laptop memiliki riwayat peminjaman dan tidak dapat dihapus.');
+          return;
+        }
+        if(!confirm('Yakin ingin menghapus laptop ini?')) return;
+        db.laptop = db.laptop.filter(x=>x.id_laptop!==id);
+        saveStorage();
+        showFlash('Data laptop berhasil dihapus.');
+        render();
+      };
+    });
+  }
+
+  if(session.role === 'admin'){
+    $('#addLaptopBtn').onclick = ()=> showLaptopForm();
+  }
+  bindLaptopActions();
+}
+
+function showLaptopForm(existing=null){
+  const wrap = $('#laptopFormWrap');
+  wrap.innerHTML = `
+    <div class="panel">
+      <div class="panel-head">
+        <h2 class="panel-title">${existing ? 'Ubah Laptop' : 'Tambah Laptop'}</h2>
+      </div>
+      <div class="panel-body">
+        <div class="form-grid">
+          <div class="form-row">
+            <label>Kode Laptop</label>
+            <input id="fKode" value="${existing ? escapeHtml(existing.kode_laptop) : ''}" placeholder="LT-006">
+          </div>
+          <div class="form-row">
+            <label>Merk</label>
+            <input id="fMerk" value="${existing ? escapeHtml(existing.merk) : ''}" placeholder="Lenovo">
+          </div>
+          <div class="form-row">
+            <label>Tipe</label>
+            <input id="fTipe" value="${existing ? escapeHtml(existing.tipe) : ''}" placeholder="ThinkPad E14">
+          </div>
+          <div class="form-row">
+            <label>Kondisi</label>
+            <select id="fKondisi">
+              ${['Baik','Rusak Ringan','Rusak Berat'].map(x=>`
+                <option ${existing && existing.kondisi===x?'selected':''}>${x}</option>
+              `).join('')}
+            </select>
+          </div>
+          <div class="form-row">
+            <label>Status</label>
+            <select id="fStatus">
+              ${['Tersedia','Dipinjam','Perbaikan','Hilang'].map(x=>`
+                <option ${existing && existing.status===x?'selected':''}>${x}</option>
+              `).join('')}
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="saveLaptopBtn">Simpan</button>
+        <button class="btn" id="cancelLaptopBtn">Batal</button>
+      </div>
+    </div>
+  `;
+
+  $('#cancelLaptopBtn').onclick = ()=> wrap.innerHTML = '';
+  $('#saveLaptopBtn').onclick = ()=>{
+    const kode = $('#fKode').value.trim();
+    const merk = $('#fMerk').value.trim();
+    const tipe = $('#fTipe').value.trim();
+
+    if(!kode || !merk || !tipe){
+      showFlash('Kode, merk, dan tipe wajib diisi.');
+      return;
+    }
+
+    const duplicate = db.laptop.some(
+      x => x.kode_laptop.toLowerCase() === kode.toLowerCase() &&
+           (!existing || x.id_laptop !== existing.id_laptop)
+    );
+
+    if(duplicate){
+      showFlash('Kode laptop sudah digunakan.');
+      return;
+    }
+
+    if(existing){
+      Object.assign(existing, {
+        kode_laptop: kode,
+        merk,
+        tipe,
+        kondisi: $('#fKondisi').value,
+        status: $('#fStatus').value
+      });
+      showFlash('Data laptop berhasil diperbarui.');
+    } else {
+      db.laptop.push({
+        id_laptop: 'L' + String(seq.laptop++).padStart(2,'0'),
+        kode_laptop: kode,
+        merk,
+        tipe,
+        kondisi: $('#fKondisi').value,
+        status: $('#fStatus').value
+      });
+      showFlash('Laptop baru berhasil ditambahkan.');
+    }
+    saveStorage();
+    wrap.innerHTML = '';
+    render();
+  };
+}
+
+/* =========================================================
+   SISWA PAGE (+ EDIT & SEARCH)
+========================================================= */
+
+function renderSiswaPage(){
+  let search = '';
+
+  function table(){
+    const data = db.siswa.filter(s=>{
+      const text = (s.nis + ' ' + s.nama_siswa + ' ' + s.kelas + ' ' + s.jurusan + ' ' + s.no_hp).toLowerCase();
+      return text.includes(search.toLowerCase());
+    });
+
+    if(!data.length){
+      return `<div class="empty">Data siswa tidak ditemukan.</div>`;
+    }
+
+    return `
+      <table>
+        <thead>
+          <tr>
+            <th>NIS</th>
+            <th>Nama Siswa</th>
+            <th>Kelas</th>
+            <th>Jurusan</th>
+            <th>No. HP</th>
+            <th>Username</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${data.map(s=>`
+            <tr>
+              <td class="kode">${escapeHtml(s.nis)}</td>
+              <td><b>${escapeHtml(s.nama_siswa)}</b></td>
+              <td>${escapeHtml(s.kelas)}</td>
+              <td>${escapeHtml(s.jurusan)}</td>
+              <td>${escapeHtml(s.no_hp || '-')}</td>
+              <td class="kode">${escapeHtml(s.username)}</td>
+              <td>
+                <button class="btn btn-sm" data-edit-siswa="${s.id_siswa}">
+                  <i data-lucide="edit-3" style="width:14px;height:14px;"></i> Ubah
+                </button>
+                <button class="btn btn-sm btn-danger" data-del-siswa="${s.id_siswa}">
+                  <i data-lucide="trash-2" style="width:14px;height:14px;"></i> Hapus
+                </button>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+
+  renderShell(`
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">Data Siswa</h2>
+          <div class="panel-sub">Siswa yang terdaftar dan berhak mengajukan peminjaman</div>
+        </div>
+        <button class="btn btn-primary" id="addSiswaBtn">+ Tambah Siswa</button>
+      </div>
+
+      <div class="panel-body">
+        <div class="search-wrap">
+          <i data-lucide="search" class="search-icon" style="width:16px;height:16px;"></i>
+          <input class="search" id="searchSiswa" placeholder="Cari NIS, nama, kelas, jurusan, atau no. HP...">
+        </div>
+        <div class="table-wrap" id="siswaTable" style="margin-top:16px;">
+          ${table()}
+        </div>
+      </div>
+    </div>
+    <div id="siswaFormWrap"></div>
+  `, 'Data Siswa', 'Manajemen Data Siswa');
+
+  if(window.lucide) lucide.createIcons();
+
+  $('#searchSiswa').oninput = e => {
+    search = e.target.value;
+    $('#siswaTable').innerHTML = table();
+    if(window.lucide) lucide.createIcons();
+    bind();
+  };
+
+  $('#addSiswaBtn').onclick = ()=> showSiswaForm();
+
+  function showSiswaForm(existing=null){
+    $('#siswaFormWrap').innerHTML = `
+      <div class="panel">
+        <div class="panel-head">
+          <h2 class="panel-title">${existing ? 'Ubah Data Siswa' : 'Tambah Siswa Baru'}</h2>
+        </div>
+        <div class="panel-body">
+          <div class="form-grid">
+            <div class="form-row">
+              <label>NIS</label>
+              <input id="fNis" value="${existing ? escapeHtml(existing.nis) : ''}">
+            </div>
+            <div class="form-row">
+              <label>Nama Siswa</label>
+              <input id="fNama" value="${existing ? escapeHtml(existing.nama_siswa) : ''}">
+            </div>
+            <div class="form-row">
+              <label>Kelas</label>
+              <select id="fKelas">
+                ${['X','XI','XII'].map(k=>`
+                  <option ${existing && existing.kelas===k?'selected':''}>${k}</option>
+                `).join('')}
+              </select>
+            </div>
+            <div class="form-row">
+              <label>Jurusan</label>
+              <input id="fJurusan" value="${existing ? escapeHtml(existing.jurusan) : ''}" placeholder="RPL">
+            </div>
+            <div class="form-row">
+              <label>No. HP</label>
+              <input id="fHp" value="${existing ? escapeHtml(existing.no_hp) : ''}">
+            </div>
+            <div class="form-row">
+              <label>Username</label>
+              <input id="fUser" value="${existing ? escapeHtml(existing.username) : ''}">
+            </div>
+          </div>
+          <button class="btn btn-primary" id="saveSiswaBtn">Simpan</button>
+          <button class="btn" id="cancelSiswaBtn">Batal</button>
+          ${!existing ? `<div class="note">Password awal siswa otomatis: <b>siswa123</b></div>` : ''}
+        </div>
+      </div>
+    `;
+
+    $('#cancelSiswaBtn').onclick = ()=> $('#siswaFormWrap').innerHTML='';
+    $('#saveSiswaBtn').onclick = ()=>{
+      const nis = $('#fNis').value.trim();
+      const nama = $('#fNama').value.trim();
+      const user = $('#fUser').value.trim();
+
+      if(!nis || !nama || !user){
+        showFlash('NIS, nama, dan username wajib diisi.');
+        return;
+      }
+
+      if(db.siswa.some(x=>x.nis===nis && (!existing || x.id_siswa !== existing.id_siswa))){
+        showFlash('NIS sudah digunakan.');
+        return;
+      }
+      if(db.siswa.some(x=>x.username===user && (!existing || x.id_siswa !== existing.id_siswa))){
+        showFlash('Username sudah digunakan.');
+        return;
+      }
+
+      if(existing){
+        Object.assign(existing, {
+          nis,
+          nama_siswa: nama,
+          username: user,
+          kelas: $('#fKelas').value,
+          jurusan: $('#fJurusan').value.trim(),
+          no_hp: $('#fHp').value.trim()
+        });
+        showFlash('Data siswa berhasil diperbarui.');
+      } else {
+        db.siswa.push({
+          id_siswa: 'S' + String(seq.siswa++).padStart(2,'0'),
+          nis,
+          nama_siswa: nama,
+          username: user,
+          password: 'siswa123',
+          kelas: $('#fKelas').value,
+          jurusan: $('#fJurusan').value.trim(),
+          no_hp: $('#fHp').value.trim()
+        });
+        showFlash('Siswa baru berhasil ditambahkan.');
+      }
+
+      saveStorage();
+      render();
+    };
+  }
+
+  function bind(){
+    document.querySelectorAll('[data-edit-siswa]').forEach(btn=>{
+      btn.onclick = ()=> showSiswaForm(findSiswa(btn.dataset.editSiswa));
+    });
+
+    document.querySelectorAll('[data-del-siswa]').forEach(btn=>{
+      btn.onclick = ()=>{
+        const id = btn.dataset.delSiswa;
+        if(db.peminjaman.some(x=>x.id_siswa===id)){
+          showFlash('Siswa memiliki riwayat peminjaman dan tidak dapat dihapus.');
+          return;
+        }
+        if(!confirm('Yakin ingin menghapus siswa ini?')) return;
+        db.siswa = db.siswa.filter(x=>x.id_siswa!==id);
+        saveStorage();
+        showFlash('Data siswa berhasil dihapus.');
+        render();
+      };
+    });
+  }
+
+  bind();
+}
+
+/* =========================================================
+   PETUGAS PAGE (+ EDIT & SEARCH)
+========================================================= */
+
+function renderPetugasPage(){
+  let search = '';
+
+  function table(){
+    const data = db.petugas.filter(p=>{
+      const text = (p.nama_petugas + ' ' + p.username + ' ' + p.no_hp).toLowerCase();
+      return text.includes(search.toLowerCase());
+    });
+
+    if(!data.length){
+      return `<div class="empty">Data petugas tidak ditemukan.</div>`;
+    }
+
+    return `
+      <table>
+        <thead>
+          <tr>
+            <th>Nama Petugas</th>
+            <th>Username</th>
+            <th>No. HP</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${data.map(p=>`
+            <tr>
+              <td><b>${escapeHtml(p.nama_petugas)}</b></td>
+              <td class="kode">${escapeHtml(p.username)}</td>
+              <td>${escapeHtml(p.no_hp || '-')}</td>
+              <td>
+                <button class="btn btn-sm" data-edit-petugas="${p.id_petugas}">
+                  <i data-lucide="edit-3" style="width:14px;height:14px;"></i> Ubah
+                </button>
+                <button class="btn btn-sm btn-danger" data-del-petugas="${p.id_petugas}">
+                  <i data-lucide="trash-2" style="width:14px;height:14px;"></i> Hapus
+                </button>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+
+  renderShell(`
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">Data Petugas</h2>
+          <div class="panel-sub">Petugas yang berhak memproses persetujuan dan pengembalian laptop</div>
+        </div>
+        <button class="btn btn-primary" id="addPetugasBtn">+ Tambah Petugas</button>
+      </div>
+
+      <div class="panel-body">
+        <div class="search-wrap">
+          <i data-lucide="search" class="search-icon" style="width:16px;height:16px;"></i>
+          <input class="search" id="searchPetugas" placeholder="Cari nama, username, atau no. HP...">
+        </div>
+        <div class="table-wrap" id="petugasTable" style="margin-top:16px;">
+          ${table()}
+        </div>
+      </div>
+    </div>
+    <div id="petugasFormWrap"></div>
+  `, 'Data Petugas', 'Manajemen Petugas SIPINTAR');
+
+  if(window.lucide) lucide.createIcons();
+
+  $('#searchPetugas').oninput = e => {
+    search = e.target.value;
+    $('#petugasTable').innerHTML = table();
+    if(window.lucide) lucide.createIcons();
+    bindPetugasActions();
+  };
+
+  $('#addPetugasBtn').onclick = ()=> showPetugasForm();
+
+  function showPetugasForm(existing=null){
+    $('#petugasFormWrap').innerHTML = `
+      <div class="panel">
+        <div class="panel-head">
+          <h2 class="panel-title">${existing ? 'Ubah Data Petugas' : 'Tambah Petugas Baru'}</h2>
+        </div>
+        <div class="panel-body">
+          <div class="form-grid">
+            <div class="form-row">
+              <label>Nama Petugas</label>
+              <input id="fNamaPetugas" value="${existing ? escapeHtml(existing.nama_petugas) : ''}">
+            </div>
+            <div class="form-row">
+              <label>Username</label>
+              <input id="fUserPetugas" value="${existing ? escapeHtml(existing.username) : ''}">
+            </div>
+            <div class="form-row">
+              <label>No. HP</label>
+              <input id="fHpPetugas" value="${existing ? escapeHtml(existing.no_hp) : ''}">
+            </div>
+          </div>
+          <button class="btn btn-primary" id="savePetugasBtn">Simpan</button>
+          <button class="btn" id="cancelPetugasBtn">Batal</button>
+          ${!existing ? `<div class="note">Password awal petugas otomatis: <b>petugas123</b></div>` : ''}
+        </div>
+      </div>
+    `;
+
+    $('#cancelPetugasBtn').onclick = ()=> $('#petugasFormWrap').innerHTML='';
+    $('#savePetugasBtn').onclick = ()=>{
+      const nama = $('#fNamaPetugas').value.trim();
+      const user = $('#fUserPetugas').value.trim();
+
+      if(!nama || !user){
+        showFlash('Nama dan username wajib diisi.');
+        return;
+      }
+      if(db.petugas.some(x=>x.username===user && (!existing || x.id_petugas !== existing.id_petugas))){
+        showFlash('Username petugas sudah digunakan.');
+        return;
+      }
+
+      if(existing){
+        Object.assign(existing, {
+          nama_petugas: nama,
+          username: user,
+          no_hp: $('#fHpPetugas').value.trim()
+        });
+        showFlash('Data petugas berhasil diperbarui.');
+      } else {
+        db.petugas.push({
+          id_petugas: 'P' + String(seq.petugas++).padStart(2,'0'),
+          nama_petugas: nama,
+          username: user,
+          password: 'petugas123',
+          no_hp: $('#fHpPetugas').value.trim()
+        });
+        showFlash('Petugas berhasil ditambahkan.');
+      }
+
+      saveStorage();
+      render();
+    };
+  }
+
+  function bindPetugasActions(){
+    document.querySelectorAll('[data-edit-petugas]').forEach(btn=>{
+      btn.onclick = ()=> showPetugasForm(findPetugas(btn.dataset.editPetugas));
+    });
+
+    document.querySelectorAll('[data-del-petugas]').forEach(btn=>{
+      btn.onclick = ()=>{
+        const id = btn.dataset.delPetugas;
+        if(db.pengembalian.some(x=>x.id_petugas===id)){
+          showFlash('Petugas memiliki riwayat pengembalian dan tidak dapat dihapus.');
+          return;
+        }
+        if(!confirm('Yakin ingin menghapus petugas ini?')) return;
+        db.petugas = db.petugas.filter(x=>x.id_petugas!==id);
+        saveStorage();
+        showFlash('Data petugas berhasil dihapus.');
+        render();
+      };
+    });
+  }
+
+  bindPetugasActions();
+}
+
+/* =========================================================
+   PEMINJAMAN TABLE & PAGE
+========================================================= */
+
+function renderPeminjamanTable(list, opts={}){
+  if(!list.length){
+    return `
+      <div class="empty">
+        <div class="empty-icon">◷</div>
+        Belum ada data peminjaman.
+      </div>
+    `;
+  }
+
+  const rows = list.map(p=>{
+    const laptops = db.detail_peminjaman
+      .filter(d=>d.id_peminjaman===p.id_peminjaman)
+      .map(d=>findLaptop(d.id_laptop)?.kode_laptop)
+      .filter(Boolean)
+      .join(', ');
+
+    const canProcess =
+      (session.role==='admin' || session.role==='petugas') &&
+      p.status==='Menunggu';
+
+    const canReturn =
+      (session.role==='admin' || session.role==='petugas') &&
+      p.status==='Dipinjam';
+
+    return `
+      <tr>
+        <td class="kode">${escapeHtml(p.id_peminjaman)}</td>
+        ${opts.siswaCol===false ? '' : `<td><b>${escapeHtml(findSiswa(p.id_siswa)?.nama_siswa || '-')}</b></td>`}
+        <td><span class="kode">${escapeHtml(laptops || '-')}</span></td>
+        <td>${escapeHtml(p.tanggal_pinjam)}</td>
+        <td>${escapeHtml(p.tanggal_kembali_rencana || '-')}</td>
+        <td>${statusBadge(p.status)}</td>
+        <td>
+          ${
+            canProcess
+            ? `
+              <button class="btn btn-sm btn-success" data-approve="${p.id_peminjaman}">Setujui</button>
+              <button class="btn btn-sm btn-danger" data-reject="${p.id_peminjaman}">Tolak</button>
+            `
+            : ''
+          }
+          ${
+            canReturn
+            ? `
+              <button class="btn btn-sm btn-primary" data-return="${p.id_peminjaman}">Pengembalian</button>
+            `
+            : ''
+          }
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  return `
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          ${opts.siswaCol===false ? '' : '<th>Siswa</th>'}
+          <th>Laptop</th>
+          <th>Tgl Pinjam</th>
+          <th>Rencana Kembali</th>
+          <th>Status</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+}
+
+function renderPeminjamanPage(){
+  let search = '';
+  function filteredList(){
+    return db.peminjaman.slice().reverse().filter(p=>{
+      const s = findSiswa(p.id_siswa);
+      const text = (p.id_peminjaman + ' ' + (s?.nama_siswa||'') + ' ' + p.status).toLowerCase();
+      return text.includes(search.toLowerCase());
+    });
+  }
+
+  renderShell(`
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">Data Peminjaman</h2>
+          <div class="panel-sub">Kelola pengajuan persetujuan dan proses pengembalian laptop</div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="search-wrap">
+          <i data-lucide="search" class="search-icon" style="width:16px;height:16px;"></i>
+          <input class="search" id="searchPeminjaman" placeholder="Cari ID peminjaman, nama siswa, atau status...">
+        </div>
+        <div class="table-wrap" id="peminjamanTableWrap" style="margin-top:16px;">
+          ${renderPeminjamanTable(filteredList())}
+        </div>
+      </div>
+    </div>
+    <div id="returnFormWrap"></div>
+  `, 'Peminjaman', 'Daftar Peminjaman Laptop');
+
+  if(window.lucide) lucide.createIcons();
+
+  $('#searchPeminjaman').oninput = e => {
+    search = e.target.value;
+    $('#peminjamanTableWrap').innerHTML = renderPeminjamanTable(filteredList());
+    if(window.lucide) lucide.createIcons();
+    bindPeminjamanActions();
+  };
+
+  bindPeminjamanActions();
+}
+
+function bindPeminjamanActions(){
+  document.querySelectorAll('[data-approve]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const p = findPeminjaman(btn.dataset.approve);
+      if(!p) return;
+      const details = db.detail_peminjaman.filter(d=>d.id_peminjaman===p.id_peminjaman);
+      const unavailable = details.some(d=>{
+        const laptop = findLaptop(d.id_laptop);
+        return !laptop || laptop.status!=='Menunggu Konfirmasi';
+      });
+
+      if(unavailable){
+        showFlash('Laptop sudah tidak tersedia.');
+        return;
+      }
+
+      p.status='Dipinjam';
+      details.forEach(d=>{
+        const laptop = findLaptop(d.id_laptop);
+        if(laptop) laptop.status='Dipinjam';
+      });
+
+      saveStorage();
+      showFlash('Peminjaman berhasil disetujui.');
+      render();
+    };
+  });
+
+  document.querySelectorAll('[data-reject]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const p = findPeminjaman(btn.dataset.reject);
+      if(!p) return;
+      p.status='Ditolak';
+      db.detail_peminjaman.filter(d=>d.id_peminjaman===p.id_peminjaman).forEach(d=>{
+        const laptop = findLaptop(d.id_laptop);
+        if(laptop && laptop.status==='Menunggu Konfirmasi'){
+          laptop.status='Tersedia';
+        }
+      });
+      saveStorage();
+      showFlash('Pengajuan peminjaman ditolak.');
+      render();
+    };
+  });
+
+  document.querySelectorAll('[data-return]').forEach(btn=>{
+    btn.onclick = ()=> showReturnForm(btn.dataset.return);
+  });
+}
+
+function showReturnForm(id){
+  const p = findPeminjaman(id);
+  const details = db.detail_peminjaman.filter(d=>d.id_peminjaman===id);
+  const wrap = $('#returnFormWrap');
+
+  wrap.innerHTML = `
+    <div class="panel">
+      <div class="panel-head">
+        <h2 class="panel-title">Proses Pengembalian ${escapeHtml(id)}</h2>
+      </div>
+      <div class="panel-body">
+        <div class="note" style="margin-bottom:18px">
+          Siswa: <b>${escapeHtml(findSiswa(p.id_siswa)?.nama_siswa || '-')}</b>
+          &nbsp; • &nbsp;
+          Laptop: <b>${details.map(d=>findLaptop(d.id_laptop)?.kode_laptop).join(', ')}</b>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-row">
+            <label>Kondisi Saat Kembali</label>
+            <select id="fKondisiKembali">
+              <option>Baik</option>
+              <option>Rusak Ringan</option>
+              <option>Rusak Berat</option>
+              <option>Hilang</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>Tanggal Pengembalian</label>
+            <input id="fTglKembali" type="date" value="${todayStr()}">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label>Keterangan</label>
+          <textarea id="fKeterangan" rows="3" placeholder="Contoh: Charger lengkap, kondisi normal."></textarea>
+        </div>
+
+        <button class="btn btn-primary" id="saveReturnBtn">Simpan Pengembalian</button>
+        <button class="btn" id="cancelReturnBtn">Batal</button>
+      </div>
+    </div>
+  `;
+
+  $('#cancelReturnBtn').onclick = ()=> wrap.innerHTML='';
+  $('#saveReturnBtn').onclick = ()=>{
+    const tanggal = $('#fTglKembali').value;
+    if(!tanggal){
+      showFlash('Tanggal pengembalian wajib diisi.');
+      return;
+    }
+    const kondisi = $('#fKondisiKembali').value;
+
+    db.pengembalian.push({
+      id_pengembalian: 'R' + String(seq.r++).padStart(2,'0'),
+      id_peminjaman: id,
+      id_petugas: session.role==='petugas' ? session.id : (db.petugas[0]?.id_petugas || 'P01'),
+      tanggal_pengembalian: tanggal,
+      kondisi_kembali: kondisi,
+      keterangan: $('#fKeterangan').value.trim()
+    });
+
+    p.status='Selesai';
+    details.forEach(d=>{
+      const laptop = findLaptop(d.id_laptop);
+      if(!laptop) return;
+      if(kondisi==='Baik'){
+        laptop.status='Tersedia';
+        laptop.kondisi='Baik';
+      } else if(kondisi==='Hilang'){
+        laptop.status='Hilang';
+        laptop.kondisi='Hilang';
+      } else {
+        laptop.status='Perbaikan';
+        laptop.kondisi=kondisi;
+      }
+    });
+
+    saveStorage();
+    showFlash('Pengembalian berhasil dicatat.');
+    render();
+  };
+}
+
+/* =========================================================
+   PENGEMBALIAN PAGE
+========================================================= */
+
+function renderPengembalianPage(){
+  const rows = db.pengembalian.slice().reverse().map(r=>{
+    const p = findPeminjaman(r.id_peminjaman);
+    return `
+      <tr>
+        <td class="kode">${escapeHtml(r.id_pengembalian)}</td>
+        <td><b>${escapeHtml(p ? findSiswa(p.id_siswa)?.nama_siswa || '-' : '-')}</b></td>
+        <td>${escapeHtml(r.tanggal_pengembalian)}</td>
+        <td>${statusBadge(r.kondisi_kembali === 'Baik' ? 'Baik' : r.kondisi_kembali)}</td>
+        <td>${escapeHtml(findPetugas(r.id_petugas)?.nama_petugas || '-')}</td>
+        <td>${escapeHtml(r.keterangan || '-')}</td>
+      </tr>
+    `;
+  }).join('');
+
+  renderShell(`
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">Riwayat Pengembalian</h2>
+          <div class="panel-sub">Catatan seluruh laptop yang telah dikembalikan oleh siswa</div>
+        </div>
+      </div>
+      <div class="table-wrap">
+        ${
+          db.pengembalian.length
+          ? `
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Siswa</th>
+                  <th>Tanggal</th>
+                  <th>Kondisi</th>
+                  <th>Petugas</th>
+                  <th>Keterangan</th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          `
+          : `<div class="empty">Belum ada data pengembalian.</div>`
+        }
+      </div>
+    </div>
+  `, 'Pengembalian', 'Riwayat Pengembalian Laptop');
+}
+
+/* =========================================================
+   SISWA - AJUKAN PEMINJAMAN
+========================================================= */
+
+function renderAjukanPage(){
+  const tersedia = db.laptop.filter(l=>l.status==='Tersedia');
+
+  renderShell(`
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">Ajukan Peminjaman Laptop</h2>
+          <div class="panel-sub">Pilih laptop yang tersedia untuk keperluan akademik</div>
+        </div>
+      </div>
+      <div class="panel-body">
+        ${
+          tersedia.length
+          ? `
+            <div class="form-row">
+              <label>Laptop yang Ingin Dipinjam</label>
+              <select id="fLaptop">
+                ${tersedia.map(l=>`
+                  <option value="${l.id_laptop}">
+                    ${escapeHtml(l.kode_laptop)} — ${escapeHtml(l.merk)} ${escapeHtml(l.tipe)} (${escapeHtml(l.kondisi)})
+                  </option>
+                `).join('')}
+              </select>
+            </div>
+            <div class="form-row">
+              <label>Rencana Tanggal Kembali</label>
+              <input id="fRencana" type="date" min="${todayStr()}">
+            </div>
+            <button class="btn btn-primary" id="ajukanBtn">Ajukan Peminjaman</button>
+            <div class="note">Pengajuan akan dikirim dan menunggu persetujuan petugas sekolah.</div>
+          `
+          : `
+            <div class="empty">
+              <div class="empty-icon">💻</div>
+              Saat ini tidak ada laptop yang tersedia untuk dipinjam.
+            </div>
+          `
+        }
+      </div>
+    </div>
+  `, 'Ajukan Peminjaman', 'Form Pengajuan Laptop');
+
+  const btn = $('#ajukanBtn');
+  if(!btn) return;
+
+  btn.onclick = ()=>{
+    const idLaptop = $('#fLaptop').value;
+    const rencana = $('#fRencana').value;
+
+    if(!rencana){
+      showFlash('Rencana tanggal kembali wajib diisi.');
+      return;
+    }
+    if(rencana < todayStr()){
+      showFlash('Tanggal kembali tidak boleh sebelum hari ini.');
+      return;
+    }
+
+    const laptop = findLaptop(idLaptop);
+    if(!laptop || laptop.status!=='Tersedia'){
+      showFlash('Laptop tersebut sudah tidak tersedia.');
+      render();
+      return;
+    }
+
+    const id = 'PJ' + String(seq.pj++).padStart(2,'0');
+
+    db.peminjaman.push({
+      id_peminjaman: id,
+      id_siswa: session.id,
+      id_admin: db.admin[0]?.id_admin || 'A01',
+      tanggal_pinjam: todayStr(),
+      tanggal_kembali_rencana: rencana,
+      status: 'Menunggu'
+    });
+
+    db.detail_peminjaman.push({
+      id_detail: 'D' + String(seq.d++).padStart(2,'0'),
+      id_peminjaman: id,
+      id_laptop: idLaptop,
+      kondisi_pinjam: laptop.kondisi
+    });
+
+    laptop.status = 'Menunggu Konfirmasi';
+    saveStorage();
+    showFlash('Pengajuan berhasil dikirim.');
+    currentPage = 'riwayat';
+    render();
+  };
+}
+
+/* =========================================================
+   RIWAYAT SISWA
+========================================================= */
+
+function renderRiwayatPage(){
+  const my = db.peminjaman
+    .filter(p=>p.id_siswa===session.id)
+    .slice()
+    .reverse();
+
+  renderShell(`
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">Riwayat Peminjaman Saya</h2>
+          <div class="panel-sub">Semua pengajuan peminjaman yang pernah kamu lakukan</div>
+        </div>
+      </div>
+      <div class="table-wrap">
+        ${renderPeminjamanTable(my, {siswaCol:false})}
+      </div>
+    </div>
+  `, 'Riwayat Saya', 'Riwayat Pengajuan Peminjaman');
+}
+
+/* =========================================================
+   ROUTER UTAMA
+========================================================= */
+
+function render(){
+  if(!session){
+    renderLogin();
+    return;
+  }
+
+  const pages = {
+    dashboard: renderDashboard,
+    laptop: renderLaptopPage,
+    siswa: renderSiswaPage,
+    petugas: renderPetugasPage,
+    peminjaman: renderPeminjamanPage,
+    pengembalian: renderPengembalianPage,
+    ajukan: renderAjukanPage,
+    riwayat: renderRiwayatPage
+  };
+
+  const page = pages[currentPage] || renderDashboard;
+  page();
+}
+
+render();
+</script>
+
+</body>
+</html>
